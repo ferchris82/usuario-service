@@ -38,5 +38,6 @@ public class UsuarioController {
     public ResponseEntity<List<Usuario>> listarUsuarios(){
         List<Usuario> usuarios = usuarioService.getAllUsuarios();
         return ResponseEntity.ok(usuarios);
+        
     }
 }
