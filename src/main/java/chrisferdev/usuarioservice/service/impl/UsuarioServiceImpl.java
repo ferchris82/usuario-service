@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import chrisferdev.usuarioservice.entity.Usuario;
-import chrisferdev.usuarioservice.exception.ResourceNotFoundException;
+import chrisferdev.usuarioservice.exceptions.ResourceNotFoundException;
 import chrisferdev.usuarioservice.repository.UsuarioRepository;
 import chrisferdev.usuarioservice.service.UsuarioService;
 
+@Service
 public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired

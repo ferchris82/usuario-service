@@ -1,4 +1,4 @@
-package chrisferdev.usuarioservice.exception;
+package chrisferdev.usuarioservice.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException {
     
