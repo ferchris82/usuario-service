@@ -1,9 +1,13 @@
-package chrisferdev.usuarioservice.entity;
+package chrisferdev.usuarioservice.entities;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,4 +33,7 @@ public class Usuario {
 
     @Column(name = "informacion")
     private String informacion;
+
+    @Transient
+    private List<Calificacion> calificaciones = new ArrayList<>();
 }

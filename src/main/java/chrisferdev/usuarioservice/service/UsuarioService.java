@@ -2,7 +2,7 @@ package chrisferdev.usuarioservice.service;
 
 import java.util.List;
 
-import chrisferdev.usuarioservice.entity.Usuario;
+import chrisferdev.usuarioservice.entities.Usuario;
 
 public interface UsuarioService {
 
