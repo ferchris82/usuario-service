@@ -1,15 +1,10 @@
 package chrisferdev.usuarioservice.service.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,8 +12,14 @@ import chrisferdev.usuarioservice.entities.Calificacion;
 import chrisferdev.usuarioservice.entities.Hotel;
 import chrisferdev.usuarioservice.entities.Usuario;
 import chrisferdev.usuarioservice.exceptions.ResourceNotFoundException;
+import chrisferdev.usuarioservice.external.services.HotelService;
 import chrisferdev.usuarioservice.repository.UsuarioRepository;
 import chrisferdev.usuarioservice.service.UsuarioService;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
@@ -30,6 +31,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private HotelService hotelService;
 
     @Override
     public Usuario saveUsuario(Usuario usuario) {
@@ -48,20 +52,21 @@ public class UsuarioServiceImpl implements UsuarioService {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con el ID : " + usuarioId));
 
-        Calificacion[] calificacionesDelUsuario = restTemplate.getForObject(
-                "http://CALIFICACION-SERVICE/calificaciones/usuarios/" + usuario.getUsuarioId(), Calificacion[].class);
-        logger.info("{}", calificacionesDelUsuario);
+        Calificacion[] calificacionesDelUsuario = restTemplate.getForObject("http://CALIFICACION-SERVICE/calificaciones/usuarios/"+usuario.getUsuarioId(),Calificacion[].class);
+        logger.info("{}",calificacionesDelUsuario);
 
         List<Calificacion> calificaciones = Arrays.stream(calificacionesDelUsuario).collect(Collectors.toList());
 
         List<Calificacion> listaCalificaciones = calificaciones.stream().map(calificacion -> {
             System.out.println(calificacion.getHotelId());
-            ResponseEntity<Hotel> forEntity = restTemplate
-                    .getForEntity("http://HOTEL-SERVICE/hoteles/" + calificacion.getHotelId(), Hotel.class);
-            Hotel hotel = forEntity.getBody();
-            logger.info("Respuesta con código de estado : {}", forEntity.getStatusCode());
+            //ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://HOTEL-SERVICE/hoteles/"+calificacion.getHotelId(),Hotel.class);
+
+            Hotel hotel = hotelService.getHotel(calificacion.getHotelId());
+
+            //logger.info("Respuesta con codigo de estado : {}",forEntity.getStatusCode());
 
             calificacion.setHotel(hotel);
+
             return calificacion;
         }).collect(Collectors.toList());
 
@@ -69,5 +74,5 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         return usuario;
     }
-
 }
+
