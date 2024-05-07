@@ -49,7 +49,7 @@ public class UsuarioServiceImpl implements UsuarioService {
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con el ID : " + usuarioId));
 
         Calificacion[] calificacionesDelUsuario = restTemplate.getForObject(
-                "http://localhost:8083/calificaciones/usuarios/" + usuario.getUsuarioId(), Calificacion[].class);
+                "http://CALIFICACION-SERVICE/calificaciones/usuarios/" + usuario.getUsuarioId(), Calificacion[].class);
         logger.info("{}", calificacionesDelUsuario);
 
         List<Calificacion> calificaciones = Arrays.stream(calificacionesDelUsuario).collect(Collectors.toList());
@@ -57,7 +57,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         List<Calificacion> listaCalificaciones = calificaciones.stream().map(calificacion -> {
             System.out.println(calificacion.getHotelId());
             ResponseEntity<Hotel> forEntity = restTemplate
-                    .getForEntity("http://localhost:8082/hoteles/" + calificacion.getHotelId(), Hotel.class);
+                    .getForEntity("http://HOTEL-SERVICE/hoteles/" + calificacion.getHotelId(), Hotel.class);
             Hotel hotel = forEntity.getBody();
             logger.info("Respuesta con código de estado : {}", forEntity.getStatusCode());
 
