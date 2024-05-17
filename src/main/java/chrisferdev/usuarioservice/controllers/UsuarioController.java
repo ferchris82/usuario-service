@@ -38,7 +38,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{usuarioId}")
-    @CircuitBreaker(name = "ratingHotelFallback", fallbackMethod = "ratingHotelFallback")
+    @CircuitBreaker(name = "ratingHotelBreaker", fallbackMethod = "ratingHotelFallback")
     public ResponseEntity<Usuario> obtenerUsuario(@PathVariable String usuarioId) {
         Usuario usuario = usuarioService.getUsuario(usuarioId);
         return ResponseEntity.ok(usuario);
